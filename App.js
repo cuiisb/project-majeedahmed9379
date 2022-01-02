@@ -10,6 +10,7 @@ import {StackActions} from '@react-navigation/native';
 import AdminLoginScreen from './screens/adminLogin';
 import StudentLoginScreen from './screens/studentLogin';
 import StudentHomeScreen from './screens/DrawerStudent';
+import AdminHomeMain from './screens/DrawerAdmin';
 import AdminHomeScreen from './screens/DrawerAdmin';
 
 const Stack = createNativeStackNavigator();

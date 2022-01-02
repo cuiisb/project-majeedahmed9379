@@ -1,25 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image,TextInput, TouchableOpacity} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View,Image,TextInput, TouchableOpacity} from 'react-native';
 import * as React from 'react';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import {StackActions} from '@react-navigation/native'
 
-const Stack = createNativeStackNavigator();
-export default function AdminLoginScreen() {
-  return (
-    <NavigationContainer screenOptions={{headerShown: false}}>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={App}  />
-        <Stack.Screen name="HomeScreen" component={HomeScreen}  />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
 
+
+const checkLoggedIn = async ()=>{
+  try{
+    const val = await AsyncStorage.getItem("@adminstatus");
+    if(val !== null){
+      console.log(val);
+      return true;
+    }
+    else{
+      console.log("No data found")
+      return false;
+    }
+    
+    
+  }
+  catch(err){
+
+  }
+}
+async function AdminLoggedIn(){
+  try{
+    await AsyncStorage.setItem("@adminstatus","Logged")
+    console.log("Logging in...");
+    console.log("Value set to logged");
+  }
+  catch(err){
+    console.log(err);
+  }
+}
 
 
 function loadAssets (){
@@ -28,7 +45,31 @@ function loadAssets (){
       "Sofia":require("../assets/fonts/sofiapro-light.otf")
     });
   }
-   function App({navigation}) {
+export default function AdminLoginScreen({navigation}) {
+    const [uname,setuname] = React.useState("");
+    const [pass,setpass] = React.useState("");
+    const [islogged,setlogged] = React.useState(false);
+
+    checkLoggedIn().then(async (res)=>{
+      console.log("Checking logged",res);
+      if((res == false) || (res == undefined)){
+        setlogged(false)
+      }
+      else{
+        setlogged(true);
+      }
+      
+      
+    })
+    if(islogged == true){
+      console.log("status here:",islogged);
+      
+      navigation.navigate("AdminHome");
+    }
+    else{
+      navigation.navigate("AdminLogin");
+    }
+    
     const [fonts,loadfonts] = React.useState(false);
     if(!fonts){
       return (
@@ -36,7 +77,7 @@ function loadAssets (){
         onFinish={()=>loadfonts(true)} onError={()=>console.log("Not loaded")} > </AppLoading>
       )
     }
-  
+    
     return (
       
       <View style={styles.container}>
@@ -55,13 +96,23 @@ function loadAssets (){
           </View>
           
           <Text style={{fontFamily:"Sofia",textAlign:"left",fontSize:30,color:"#376fb8"}}>Admin Login </Text>
-          <TextInput placeholder='Username' style={styles.input} selectionColor={"blue"} underlineColorAndroid={"blue"}></TextInput>
-          <TextInput secureTextEntry={true} placeholder='Password'style={styles.input} underlineColorAndroid={"blue"}></TextInput>
+          <TextInput placeholder='Username' style={styles.input} selectionColor={"blue"} underlineColorAndroid={"blue"}
+          onChangeText={(text)=>{
+            setuname(text);
+
+          }}></TextInput>
+          <TextInput secureTextEntry={true} placeholder='Password'style={styles.input} underlineColorAndroid={"blue"}
+          onChangeText={(text)=>{
+            setpass(text)}}>
+
+            </TextInput>
           <TouchableOpacity style={styles.loginButton} 
-          onPress={
-            ()=>{
-  
-            navigation.dispatch(StackActions.replace('HomeScreen'));
+          onPress={()=>{
+              if((uname == "123" )& (pass=="123")){
+                AdminLoggedIn();
+                navigation.navigate("AdminHome");
+              }
+            // navigation.dispatch(StackActions.replace('AdminHome'));
           }}>
             <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}>Log In</Text>
   

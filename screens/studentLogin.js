@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image,TextInput, TouchableOpacity} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View,Image,TextInput, TouchableOpacity} from 'react-native';
 import * as React from 'react';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
@@ -9,6 +9,34 @@ import {StackActions} from '@react-navigation/native'
 import StudentHomeMain from './Studenthomemain';
 
 
+const checkLoggedIn = async ()=>{
+  try{
+    const val = await AsyncStorage.getItem("@studentstatus");
+    if(val !== null){
+      console.log(val);
+      return true;
+    }
+    else{
+      console.log("No data found")
+      return false;
+    }
+    
+    
+  }
+  catch(err){
+
+  }
+}
+async function StudentLoggedIn(){
+  try{
+    await AsyncStorage.setItem("@studentstatus","Logged")
+    console.log("Logging in...");
+    console.log("Value set to logged");
+  }
+  catch(err){
+    console.log(err);
+  }
+}
 
 function loadAssets (){
     return Font.loadAsync({
@@ -17,6 +45,33 @@ function loadAssets (){
     });
   }
   export default function StudentLoginScreen({navigation}) {
+    const [uname,setuname] = React.useState("");
+    const [pass,setpass] = React.useState("");
+    const [islogged,setlogged] = React.useState(false);
+
+    checkLoggedIn().then(async (res)=>{
+      const RES = await res;
+      console.log("Checking logged",RES);
+      if((RES == false)||(RES == undefined)){
+        setlogged(false)
+      }
+      else{
+        setlogged(true);
+      }
+      
+      
+    })
+    if(islogged == true){
+      console.log("status here:",islogged);
+      
+      navigation.navigate("StudentHome");
+    }
+    else{
+      navigation.navigate("StudentLogin");
+    }
+
+
+
     const [fonts,loadfonts] = React.useState(false);
     if(!fonts){
       return (
@@ -43,14 +98,27 @@ function loadAssets (){
           </View>
           
           <Text style={{fontFamily:"Sofia",textAlign:"left",fontSize:30,color:"#376fb8"}}>Student Login </Text>
-          <TextInput placeholder='Username' style={styles.input} selectionColor={"blue"} underlineColorAndroid={"blue"}></TextInput>
-          <TextInput secureTextEntry={true} placeholder='Password'style={styles.input} underlineColorAndroid={"blue"}></TextInput>
-          <TouchableOpacity style={styles.loginButton} 
-          onPress={
-            ()=>{
+          <TextInput placeholder='Username' style={styles.input} selectionColor={"blue"} underlineColorAndroid={"blue"}
+            onChangeText={(text)=>{
+              setuname(text);
   
-            navigation.dispatch(StackActions.replace('StudentHome'));
-          }}>
+            }}
+          ></TextInput>
+          <TextInput secureTextEntry={true} placeholder='Password'style={styles.input} underlineColorAndroid={"blue"}
+            onChangeText={(text)=>{
+              setpass(text);
+  
+            }}
+          ></TextInput>
+          <TouchableOpacity style={styles.loginButton} 
+              onPress={()=>{
+                if((uname == "123" )& (pass=="123")){
+                  StudentLoggedIn();
+                  navigation.navigate("StudentHome");
+                }
+              // navigation.dispatch(StackActions.replace('AdminHome'));
+            }}
+          >
             <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}>Log In</Text>
   
           </TouchableOpacity>
