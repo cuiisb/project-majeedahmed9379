@@ -13,11 +13,11 @@ const checkLoggedIn = async ()=>{
   try{
     const val = await AsyncStorage.getItem("@adminstatus");
     if(val !== null){
-      console.log(val);
+      // console.log(val);
       return true;
     }
     else{
-      console.log("No data found")
+      // console.log("No data found")
       return false;
     }
     
@@ -30,8 +30,8 @@ const checkLoggedIn = async ()=>{
 async function AdminLoggedIn(){
   try{
     await AsyncStorage.setItem("@adminstatus","Logged")
-    console.log("Logging in...");
-    console.log("Value set to logged");
+    // console.log("Logging in...");
+    // console.log("Value set to logged");
   }
   catch(err){
     console.log(err);
@@ -51,7 +51,7 @@ export default function AdminLoginScreen({navigation}) {
     const [islogged,setlogged] = React.useState(false);
 
     checkLoggedIn().then(async (res)=>{
-      console.log("Checking logged",res);
+      // console.log("Checking logged",res);
       if((res == false) || (res == undefined)){
         setlogged(false)
       }
@@ -62,7 +62,7 @@ export default function AdminLoginScreen({navigation}) {
       
     })
     if(islogged == true){
-      console.log("status here:",islogged);
+      // console.log("status here:",islogged);
       
       navigation.navigate("AdminHome");
     }

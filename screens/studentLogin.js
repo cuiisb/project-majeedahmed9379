@@ -13,11 +13,11 @@ const checkLoggedIn = async ()=>{
   try{
     const val = await AsyncStorage.getItem("@studentstatus");
     if(val !== null){
-      console.log(val);
+      // console.log(val);
       return true;
     }
     else{
-      console.log("No data found")
+      // console.log("No data found")
       return false;
     }
     
@@ -30,8 +30,8 @@ const checkLoggedIn = async ()=>{
 async function StudentLoggedIn(){
   try{
     await AsyncStorage.setItem("@studentstatus","Logged")
-    console.log("Logging in...");
-    console.log("Value set to logged");
+    // console.log("Logging in...");
+    // console.log("Value set to logged");
   }
   catch(err){
     console.log(err);
@@ -51,7 +51,7 @@ function loadAssets (){
 
     checkLoggedIn().then(async (res)=>{
       const RES = await res;
-      console.log("Checking logged",RES);
+      // console.log("Checking logged",RES);
       if((RES == false)||(RES == undefined)){
         setlogged(false)
       }
@@ -62,7 +62,7 @@ function loadAssets (){
       
     })
     if(islogged == true){
-      console.log("status here:",islogged);
+      // console.log("status here:",islogged);
       
       navigation.navigate("StudentHome");
     }

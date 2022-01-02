@@ -12,10 +12,11 @@ import StudentHomeMain from './Studenthomemain';
 
 const Drawer = createDrawerNavigator();
 
-export default function HomeScreen() {
+export default function StudentHomeScreen() {
   return (
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={StudentHomeMain} />
+        {/* <Drawer.Screen name="" component={} /> */}
       </Drawer.Navigator>
   );
 }

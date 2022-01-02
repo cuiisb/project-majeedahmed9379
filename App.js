@@ -11,7 +11,6 @@ import AdminLoginScreen from './screens/adminLogin';
 import StudentLoginScreen from './screens/studentLogin';
 import StudentHomeScreen from './screens/DrawerStudent';
 import AdminHomeMain from './screens/DrawerAdmin';
-import AdminHomeScreen from './screens/DrawerAdmin';
 
 const Stack = createNativeStackNavigator();
 export default function nav() {
@@ -22,7 +21,7 @@ export default function nav() {
         <Stack.Screen name="AdminLogin" component={AdminLoginScreen}  />
         <Stack.Screen name="StudentLogin" component={StudentLoginScreen}  />
         <Stack.Screen name="StudentHome" component={StudentHomeScreen}  />
-        <Stack.Screen name="AdminHome" component={AdminHomeScreen}  />
+        <Stack.Screen name="AdminHome" component={AdminHomeMain}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -68,7 +67,7 @@ function loadAssets (){
 
           navigation.navigate("AdminLogin");
         }}>
-          <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}> Admin Log-In</Text>
+          <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}> Admin</Text>
 
         </TouchableOpacity>
 
@@ -78,7 +77,7 @@ function loadAssets (){
 
             navigation.navigate("StudentLogin");
         }}>
-          <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}>Student Log-In</Text>
+          <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}>Student</Text>
 
         </TouchableOpacity>
      
