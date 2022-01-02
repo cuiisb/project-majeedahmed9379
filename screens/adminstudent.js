@@ -28,6 +28,18 @@ const AddStudents = (name,age,dpt,semester) => {
     .catch((error) => console.log('error', error));
 };
 
+const deleteStudent = (id) => {
+  console.log("trying to delete" , id);
+  var requestOptions = {
+    method: 'DELETE',
+  };
+
+  fetch(`${FIREBASE_API_ENDPOINT}/students/${id}.json`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => console.log('Delete Response:', result))
+    .catch((error) => console.log('error', error));
+};
+
 
 const Tab = createMaterialBottomTabNavigator();
 export default function MyTabs() {
@@ -75,24 +87,48 @@ function AllStudents({navigation}){
   
   var [allstuds,setallstuds]= React.useState(["Refreshing.."]);
   var [allstudsids,setallstudsids]= React.useState(["Refreshing.."]);
-  if(allstuds.length == 1){
+  if((allstuds == null)){
+      return(
+        <View>
+          <Button title="Refresh" onPress={()=>{
+              getStudents()
+              .then((res)=>{
+                setallstuds(res);
+                setallstudsids(Object.keys(res))
+            });
+          }}></Button>
+          <Text>No students to display</Text>
+        </View>
+      )
+  }
+  else if(allstuds.length == 1){
     getStudents()
-    .then((res)=>{
-      setallstuds(res);
-      setallstudsids(Object.keys(res));
-      
-    }); 
+  .then((res)=>{
+    setallstuds(res);
+    setallstudsids(Object.keys(res));
+    
+  })
+  .catch();
+   
   }
   
   
     return(
         <View>
-            
+            <Button title="Refresh" onPress={()=>{
+              getStudents()
+              .then((res)=>{
+                setallstuds(res);
+                setallstudsids(Object.keys(res))
+                
+            })
+            .catch();
+          }}></Button>
             <ScrollView style={{width:"95%"}} >
+              
             <Text>All Students List</Text>
             <View>
               {
-
                Object.keys(allstuds).map((item) => (
                   <TouchableOpacity
                      style={styles.list}
@@ -107,7 +143,15 @@ function AllStudents({navigation}){
                      </Text>
                      <TouchableOpacity style={{width:30,position:"absolute",marginLeft:"70%",marginTop:"2%"}}
                      onPress={()=>{
-                       console.log("Deleting",allstuds[item].name)
+                      deleteStudent(allstudsids[Object.keys(allstuds).indexOf(item)]);
+                       console.log("Deleting",allstuds[item].name);
+                       getStudents()
+                      .then((res)=>{
+                        setallstuds(res);
+                        setallstudsids(Object.keys(res));
+                      })
+                      .catch()
+                       
                      }}
                      >
                          <Text>Delete</Text>
@@ -202,17 +246,39 @@ function AddStudent({navigation}){
     )
 }
 
+
+const updateData = (id,name,age,semester,department) => {
+  
+  var requestOptions = {
+    method: 'PATCH',
+    body: JSON.stringify({
+      name:name,
+      age:age,
+      semester:semester,
+      department:department
+    }),
+  };
+
+  fetch(`${FIREBASE_API_ENDPOINT}/students/${id}.json`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch((error) => console.log('error', error));
+};
+
 function EditStudent({navigation,route}){
   var name = "";
   var age = "";
   var semester = "";
   var department = "";
+  var id;
+
   if(route.params){
-    console.log(route.params);
+    console.log(route.params.id);
     name = route.params.name;
     age = route.params.age;
     semester = route.params.semester;
     department = route.params.department;
+    id = route.params.id;
   }
     
     
@@ -224,6 +290,7 @@ function EditStudent({navigation,route}){
             <Text style={{textAlign:"center",marginTop:20,fontSize:25,fontFamily:'Bold',color:"#1aa7ec"}}>Edit</Text>
             <TextInput placeholder='Name' style={styles.input} selectionColor={"blue"} 
                 onChangeText={(text)=>{
+                  name = text;
           }}
           defaultValue={name}
           >
@@ -231,20 +298,21 @@ function EditStudent({navigation,route}){
 
               <TextInput placeholder='Age' style={styles.input} selectionColor={"blue"} 
                 onChangeText={(text)=>{
-       
+                age = text;
           }}
           defaultValue={age}
           ></TextInput>
 
           <TextInput placeholder='Department' style={styles.input} selectionColor={"blue"} 
                 onChangeText={(text)=>{
+                department = text
           }}
           defaultValue={department}
           ></TextInput>
 
 <TextInput placeholder='Semester' style={styles.input} selectionColor={"blue"} 
                 onChangeText={(text)=>{
-                name = text;
+                semester = text;
                 
           }}
           defaultValue={semester}
@@ -258,7 +326,10 @@ function EditStudent({navigation,route}){
           <TouchableOpacity style={[styles.AddButton,{backgroundColor:'#797ef6'}]} 
         onPress={
           ()=>{
-            console.log(name);
+            if(id !== undefined){
+              updateData(id,name,age,semester,department);
+            }
+
         }}
         activeOpacity={0.5} 
         >
