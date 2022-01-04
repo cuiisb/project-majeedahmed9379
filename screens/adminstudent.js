@@ -11,14 +11,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const FIREBASE_API_ENDPOINT = 'https://campushelper-59195-default-rtdb.firebaseio.com/';
 
-const AddStudents = (name,age,dpt,semester) => {
+const AddStudents = (name,age,dpt,semester,username,password) => {
   var requestOptions = {
     method: 'POST',
     body: JSON.stringify({
       name:name,
       age:age,
       department:dpt,
-      semester:semester
+      semester:semester,
+      username:username,
+      password:password
     }),
   };
 
@@ -134,7 +136,7 @@ function AllStudents({navigation}){
                   <TouchableOpacity
                      style={styles.list}
                      onPress = {() =>{
-                      Alert.alert(allstuds[item].name,`Age: ${allstuds[item].age} \n Department: ${allstuds[item].department}`);
+                      Alert.alert(allstuds[item].name,`Age: ${allstuds[item].age} \nDepartment: ${allstuds[item].department}`);
                      }}
                      
                      >
@@ -188,6 +190,8 @@ function AddStudent({navigation}){
     var age = '';
     var dpt = '';
     var semester = '';
+    var username = "";
+    var password = '';
     return(
         <View style={{width:"100%"}}>
             
@@ -211,14 +215,26 @@ function AddStudent({navigation}){
                 dpt = text;
                 
           }}></TextInput>
-
-<TextInput placeholder='Semester' style={styles.input} selectionColor={"blue"} 
+          <TextInput placeholder='Semester' style={styles.input} selectionColor={"blue"} 
                 onChangeText={(text)=>{
                 semester = text;
                 
           }}
           
           ></TextInput>
+          <TextInput placeholder='username' style={styles.input} selectionColor={"blue"} 
+                onChangeText={(text)=>{
+                username = text;
+                
+          }}></TextInput>
+
+          <TextInput placeholder='password' style={styles.input} selectionColor={"blue"} 
+                onChangeText={(text)=>{
+                password = text;
+                
+          }}></TextInput>
+
+
 
           
 
@@ -228,7 +244,7 @@ function AddStudent({navigation}){
           <TouchableOpacity style={styles.AddButton} 
         onPress={
           ()=>{
-            AddStudents(name,age,dpt,semester);
+            AddStudents(name,age,dpt,semester,username,password);
             
         }}
         activeOpacity={0.5} 

@@ -7,7 +7,29 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {StackActions} from '@react-navigation/native'
 import StudentHomeMain from './Studenthomemain';
+const FIREBASE_API_ENDPOINT = 'https://campushelper-59195-default-rtdb.firebaseio.com/';
+async function getStudents(){
+  const response = await fetch(`${FIREBASE_API_ENDPOINT}/students.json`);
+  const data = await response.json();
+  return data;
+};
 
+function validate(allstuds,username,password){
+  
+  
+  var key = '';
+  var allstudsids = Object.keys(allstuds);
+  var access  = false;
+  Object.keys(allstuds).filter((item) => (
+      allstuds[item].username == username ? key = allstudsids[Object.keys(allstuds).indexOf(item)] : console.log("")
+  ))
+  if(allstuds[key].password == password){
+    return allstuds[key];
+  }
+  else{
+    return undefined;
+  }
+}
 
 const checkLoggedIn = async ()=>{
   try{
@@ -27,11 +49,14 @@ const checkLoggedIn = async ()=>{
 
   }
 }
-async function StudentLoggedIn(){
+async function StudentLoggedIn(name,age,department){
   try{
     await AsyncStorage.setItem("@studentstatus","Logged")
+    await AsyncStorage.setItem("@studentname",name);
+    await AsyncStorage.setItem("@studentage",age);
+    await AsyncStorage.setItem("@studentdepartment",department)
     // console.log("Logging in...");
-    // console.log("Value set to logged");
+    console.log("Value set to logged");
   }
   catch(err){
     console.log(err);
@@ -79,7 +104,9 @@ function loadAssets (){
         onFinish={()=>loadfonts(true)} onError={()=>console.log("Not loaded")} > </AppLoading>
       )
     }
-  
+  var name;
+  var age;
+  var department;
     return (
       
       <View style={styles.container}>
@@ -112,12 +139,24 @@ function loadAssets (){
           ></TextInput>
           <TouchableOpacity style={styles.loginButton} 
               onPress={()=>{
-                if((uname == "123" )& (pass=="123")){
-                  StudentLoggedIn();
-                  navigation.navigate("StudentHome");
-                }
-              // navigation.dispatch(StackActions.replace('AdminHome'));
+                let user;
+                // if((uname == "123" )& (pass=="123")){
+                //   StudentLoggedIn();
+                //   navigation.navigate("StudentHome");
+                // }
+              getStudents().then(res=>{
+                
+                user = validate(res,uname,pass);
+                // console.log(user);
+                name=user.name;
+                age=user.age;
+                department = user.department;
+                StudentLoggedIn(name,age,department);
+                navigation.navigate("StudentHome");
+              } 
+              );
             }}
+            
           >
             <Text style={{fontFamily:"Bold",color:"white",fontSize:25}}>Log In</Text>
   
