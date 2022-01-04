@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image,TextInput, TouchableOpacity,ScrollView,Button} from 'react-native';
+import { Alert,StyleSheet, Text, View,Image,TextInput, TouchableOpacity,ScrollView,Button} from 'react-native';
 import * as React from 'react';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
@@ -90,6 +90,7 @@ function AllStudents({navigation}){
   if((allstuds == null)){
       return(
         <View>
+          
           <Button title="Refresh" onPress={()=>{
               getStudents()
               .then((res)=>{
@@ -126,14 +127,14 @@ function AllStudents({navigation}){
           }}></Button>
             <ScrollView style={{width:"95%"}} >
               
-            <Text>All Students List</Text>
+            <Text style={{textAlign:'center', fontFamily:"Bold",fontSize:20,marginTop:15,color:"blue"}}>All Students List</Text>
             <View>
               {
                Object.keys(allstuds).map((item) => (
                   <TouchableOpacity
                      style={styles.list}
                      onPress = {() =>{
-                      console.log(allstudsids[Object.keys(allstuds).indexOf(item)]);
+                      Alert.alert(allstuds[item].name,`Age: ${allstuds[item].age} \n Department: ${allstuds[item].department}`);
                      }}
                      
                      >

@@ -11,6 +11,9 @@ import AdminLoginScreen from './screens/adminLogin';
 import StudentLoginScreen from './screens/studentLogin';
 import StudentHomeScreen from './screens/DrawerStudent';
 import AdminHomeMain from './screens/DrawerAdmin';
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 export default function nav() {
