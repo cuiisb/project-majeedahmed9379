@@ -12,7 +12,7 @@ import StudentLoginScreen from './screens/studentLogin';
 import StudentHomeScreen from './screens/DrawerStudent';
 import AdminHomeMain from './screens/DrawerAdmin';
 import { LogBox } from "react-native";
-
+import Gettogethers from './screens/gettogethers';
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +25,7 @@ export default function nav() {
         <Stack.Screen name="StudentLogin" component={StudentLoginScreen}  />
         <Stack.Screen name="StudentHome" component={StudentHomeScreen}  />
         <Stack.Screen name="AdminHome" component={AdminHomeMain}  />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

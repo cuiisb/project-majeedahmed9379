@@ -7,7 +7,7 @@ import AppLoading from 'expo-app-loading';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import StudentHomeMain from './Studenthomemain';
-
+import Gettogethers from './gettogethers';
 
 
 const Drawer = createDrawerNavigator();
@@ -16,6 +16,7 @@ export default function StudentHomeScreen() {
   return (
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={StudentHomeMain} />
+        <Drawer.Screen name="gettogethers" component={Gettogethers}  />
         {/* <Drawer.Screen name="" component={} /> */}
       </Drawer.Navigator>
   );
