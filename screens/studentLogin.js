@@ -14,6 +14,19 @@ async function getStudents(){
   return data;
 };
 
+async function setloginID(id){
+  try{
+    console.log("Storing id: ",id);
+    const set = await AsyncStorage.setItem("@studentdbid",id);
+    return set;
+
+  }
+
+  catch(err){
+    console.log(err);
+  }
+  
+}
 function validate(allstuds,username,password){
   
   
@@ -24,6 +37,7 @@ function validate(allstuds,username,password){
       allstuds[item].username == username ? key = allstudsids[Object.keys(allstuds).indexOf(item)] : console.log("")
   ))
   if(allstuds[key].password == password){
+    setloginID(key).then(res=>{console.log(res)});
     return allstuds[key];
   }
   else{
@@ -49,12 +63,14 @@ const checkLoggedIn = async ()=>{
 
   }
 }
-async function StudentLoggedIn(name,age,department){
+async function StudentLoggedIn(name,age,department,uname,pass){
   try{
     await AsyncStorage.setItem("@studentstatus","Logged")
     await AsyncStorage.setItem("@studentname",name);
     await AsyncStorage.setItem("@studentage",age);
     await AsyncStorage.setItem("@studentdepartment",department)
+    await AsyncStorage.setItem("@studnetuname",uname)
+    await AsyncStorage.setItem("@studentpass",pass)
     // console.log("Logging in...");
     console.log("Value set to logged");
   }
@@ -151,7 +167,7 @@ function loadAssets (){
                 name=user.name;
                 age=user.age;
                 department = user.department;
-                StudentLoggedIn(name,age,department);
+                StudentLoggedIn(name,age,department,uname,pass);
                 navigation.navigate("StudentHome");
               } 
               );

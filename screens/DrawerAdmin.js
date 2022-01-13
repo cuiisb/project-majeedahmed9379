@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import StudentHomeMain from './Studenthomemain';
 import AdminHomeMain from './Adminhomemain';
 import adminstudent from './adminstudent';
+import GetComplaints from './admincomplains';
 
 
 const Drawer = createDrawerNavigator();
@@ -19,7 +20,8 @@ export default function AdminHomeScreen() {
   return (
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={AdminHomeMain} />
-        <Drawer.Screen name="adminstudent" component={adminstudent} />
+        <Drawer.Screen name="Students Console" component={adminstudent} />
+        <Drawer.Screen name="See Complaints" component={GetComplaints} />
       </Drawer.Navigator>
   );
 }
